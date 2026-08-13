@@ -160,11 +160,11 @@ export function SolarCalculator() {
   };
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col justify-center px-4 py-8">
+    <div className="mx-auto w-full max-w-md px-4 pb-14">
       <BrandHeader logoUrl="/soltech-logo.png" />
 
       {step === 0 ? (
-    <section className="animate-step-in mt-4 overflow-hidden rounded-3xl bg-gradient-hero p-7 text-center text-primary-foreground shadow-elevated">
+    <section className="animate-step-in mt-4 flex min-h-[560px] flex-col justify-center overflow-hidden rounded-3xl bg-gradient-hero p-7 text-center text-primary-foreground shadow-elevated">
       {/* Top Aligned Text Content */}
       <div className="flex flex-col items-center pt-2">
         <span className="inline-flex items-center gap-2 rounded-full bg-solar/20 px-4 py-1.5 text-xs font-semibold text-solar">
