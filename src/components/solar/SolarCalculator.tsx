@@ -164,25 +164,29 @@ export function SolarCalculator() {
       <BrandHeader logoUrl={logoAsset.url} />
 
       {step === 0 ? (
-        <section className="animate-step-in mt-4 flex min-h-[480px] flex-col items-center justify-center overflow-hidden rounded-3xl bg-gradient-hero p-8 text-center text-primary-foreground shadow-elevated">
-          <span className="inline-flex items-center gap-2 rounded-full bg-solar/20 px-3 py-1 text-xs font-semibold text-solar">
-            ✦ 100% Free Savings Check
-          </span>
-          <h1 className="mt-4 text-3xl font-extrabold leading-tight sm:text-4xl">
-            Let's calculate your solar savings
-          </h1>
-          <p className="mt-3 text-sm text-primary-foreground/80 max-w-sm mx-auto">
-            See your estimated solar savings in less than 60 seconds.
-          </p>
-          <div className="mt-6 w-full max-w-xs">
-            <PrimaryButton variant="solar" onClick={() => setStep(1)}>
-              Start Calculation
-            </PrimaryButton>
-          </div>
-          <p className="mt-4 text-center text-[11px] text-primary-foreground/60">
-            7 quick questions · Estimates only, not a guarantee
-          </p>
-        </section>
+    <section className="animate-step-in mt-4 flex min-h-[480px] flex-col justify-between overflow-hidden rounded-3xl bg-gradient-hero p-8 text-center text-primary-foreground shadow-elevated">
+      {/* Top Aligned Text Content */}
+      <div className="flex flex-col items-center pt-2">
+        <span className="inline-flex items-center gap-2 rounded-full bg-solar/20 px-4 py-1.5 text-xs font-semibold text-solar">
+          ✦ 100% Free Savings Check
+        </span>
+        <h1 className="mt-6 text-3xl font-extrabold leading-tight sm:text-4xl max-w-md">
+          Let's calculate your solar savings
+        </h1>
+        <p className="mt-4 text-sm text-primary-foreground/80 max-w-sm">
+          See your estimated solar savings in less than 60 seconds.
+        </p>
+      </div>
+      {/* Bottom Aligned Button & Guarantee Disclaimer */}
+      <div className="mt-10 flex flex-col items-center w-full space-y-4">
+        <PrimaryButton variant="solar" onClick={() => setStep(1)}>
+          Start Calculation
+        </PrimaryButton>
+        <p className="text-[11px] text-primary-foreground/60">
+          7 quick questions · Instant Savings Calculation
+        </p>
+      </div>
+    </section>
       ) : null}
 
       {step >= 1 && step <= TOTAL_STEPS ? (
