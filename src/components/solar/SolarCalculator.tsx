@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import logoAsset from "@/assets/soltech-logo.png";
+import logo from "@/assets/soltech-logo.png";
 import { submitLead } from "@/lib/leads.functions";
 import { calculateSolar, type CalcResult } from "@/lib/solar-calc";
 import {
@@ -161,16 +161,16 @@ export function SolarCalculator() {
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col justify-center px-4 py-8">
-      <BrandHeader logoUrl={logoAsset.url} />
+      <BrandHeader logoUrl="/soltech-logo.png" />
 
       {step === 0 ? (
-    <section className="animate-step-in mt-4 flex min-h-[480px] flex-col justify-between overflow-hidden rounded-3xl bg-gradient-hero p-8 text-center text-primary-foreground shadow-elevated">
+    <section className="animate-step-in mt-4 overflow-hidden rounded-3xl bg-gradient-hero p-7 text-center text-primary-foreground shadow-elevated">
       {/* Top Aligned Text Content */}
       <div className="flex flex-col items-center pt-2">
         <span className="inline-flex items-center gap-2 rounded-full bg-solar/20 px-4 py-1.5 text-xs font-semibold text-solar">
           ✦ 100% Free Savings Check
         </span>
-        <h1 className="mt-6 text-3xl font-extrabold leading-tight sm:text-4xl max-w-md">
+        <h1 className="mt-6 w-full text-center text-4xl font-extrabold leading-tight px-4 sm:text-5xl">
           Let's calculate your solar savings
         </h1>
         <p className="mt-4 text-sm text-primary-foreground/80 max-w-sm">
