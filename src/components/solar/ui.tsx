@@ -129,7 +129,7 @@ export function PrimaryButton({
     primary:
       "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-card shadow-card",
     solar:
-      "bg-gradient-solar text-solar-foreground shadow-card transition-all duration-300 hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.25)] hover:brightness-[1.03] active:brightness-[0.98]",
+      "bg-gradient-solar text-solar-foreground shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 hover:brightness-90 active:translate-y-0 active:brightness-95",
     success:
       "bg-success text-success-foreground hover:bg-success/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-card shadow-card",
     outline:
