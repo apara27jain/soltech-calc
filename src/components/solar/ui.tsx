@@ -99,28 +99,37 @@ export function PrimaryButton({
   type = "button",
   variant = "primary",
   className,
-}: {
+}: 
+
+{
   children: ReactNode;
   onClick?: (() => void) | undefined;
   disabled?: boolean | undefined;
   type?: "button" | "submit";
   variant?: "primary" | "solar" | "success" | "outline" | "ghost";
   className?: string | undefined;
-}) {
+}) 
+
+{
   const variants: Record<string, string> = {
-    primary: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-card",
-    solar: "bg-gradient-solar text-solar-foreground hover:brightness-105 shadow-card",
-    success: "bg-success text-success-foreground hover:bg-success/90 shadow-card",
-    outline: "border-2 border-primary/25 bg-card text-primary hover:bg-accent",
+    primary:
+      "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-card shadow-card",
+    solar:
+      "bg-gradient-solar text-solar-foreground hover:brightness-105 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-card shadow-card",
+    success:
+      "bg-success text-success-foreground hover:bg-success/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-card shadow-card",
+    outline:
+      "border-2 border-primary/25 bg-card text-primary hover:bg-accent hover:border-primary/50 hover:-translate-y-0.5",
     ghost: "text-muted-foreground hover:text-foreground",
   };
+
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold transition-all active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50",
+        "inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50",
         variants[variant],
         className,
       )}
