@@ -171,7 +171,7 @@ export function SolarCalculator() {
           ✦ 100% Free Savings Check
         </span>
         <h1 className="mt-6 w-full text-center text-4xl font-extrabold leading-tight px-4 sm:text-5xl">
-          Let's calculate your solar savings
+          Let's Calculate <br> your <br> Solar Savings
         </h1>
         <p className="mt-4 text-sm text-primary-foreground/80 max-w-sm">
           See your estimated solar savings in less than 60 seconds.
