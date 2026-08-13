@@ -129,7 +129,7 @@ export function PrimaryButton({
     primary:
       "bg-primary text-primary-foreground hover:bg-primary/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-card shadow-card",
     solar:
-      "bg-gradient-solar text-solar-foreground hover:brightness-105 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-card shadow-card",
+      "bg-gradient-solar text-solar-foreground shadow-card transition-all duration-300 hover:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.25)] hover:brightness-[1.03] active:brightness-[0.98]",
     success:
       "bg-success text-success-foreground hover:bg-success/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-card shadow-card",
     outline:
@@ -143,7 +143,7 @@ export function PrimaryButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold transition-all duration-200 active:scale-[0.5] disabled:cursor-not-allowed disabled:opacity-20",
+        "inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl px-5 text-sm font-semibold transition-all duration-200 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50",
         variants[variant],
         className,
       )}
