@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import logoAsset from "@/assets/soltech-logo.png.asset.json";
+import logoAsset from "@/assets/soltech-logo.png";
 import { submitLead } from "@/lib/leads.functions";
 import { calculateSolar, type CalcResult } from "@/lib/solar-calc";
 import {
