@@ -178,8 +178,8 @@ export function SolarCalculator() {
         </p>
       </div>
       {/* Bottom Aligned Button & Guarantee Disclaimer */}
-      <div className="mt-10 flex flex-col items-center w-full space-y-4">
-        <PrimaryButton variant="solar" onClick={() => setStep(1)}>
+      <div className="mt-6 flex justify-center">
+        <PrimaryButton variant="solar" onClick={() => setStep(1)} className="h-14 max-w-xs">
           Start Calculation
         </PrimaryButton>
         <p className="text-[11px] text-primary-foreground/60">
