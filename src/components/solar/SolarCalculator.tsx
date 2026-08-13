@@ -160,21 +160,21 @@ export function SolarCalculator() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-xl px-4 pb-14">
+    <div className="mx-auto flex min-h-screen w-full max-w-xl flex-col justify-center px-4 py-8">
       <BrandHeader logoUrl={logoAsset.url} />
 
       {step === 0 ? (
-        <section className="animate-step-in mt-4 overflow-hidden rounded-3xl bg-gradient-hero p-7 text-primary-foreground shadow-elevated">
+        <section className="animate-step-in mt-4 flex min-h-[480px] flex-col items-center justify-center overflow-hidden rounded-3xl bg-gradient-hero p-8 text-center text-primary-foreground shadow-elevated">
           <span className="inline-flex items-center gap-2 rounded-full bg-solar/20 px-3 py-1 text-xs font-semibold text-solar">
-            ☀️ Free · No obligation
+            ✦ 100% Free Savings Check
           </span>
           <h1 className="mt-4 text-3xl font-extrabold leading-tight sm:text-4xl">
             Let's calculate your solar savings
           </h1>
-          <p className="mt-3 text-sm text-primary-foreground/80">
+          <p className="mt-3 text-sm text-primary-foreground/80 max-w-sm mx-auto">
             See your estimated solar savings in less than 60 seconds.
           </p>
-          <div className="mt-6">
+          <div className="mt-6 w-full max-w-xs">
             <PrimaryButton variant="solar" onClick={() => setStep(1)}>
               Start Calculation
             </PrimaryButton>
