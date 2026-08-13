@@ -1,14 +1,28 @@
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-export function BrandHeader({ logoUrl }: { logoUrl: string }) {
+export function BrandHeader({ logoUrl }: { logoUrl?: string }) {
   return (
     <header className="flex items-center justify-between gap-3 px-1 py-4">
       <div className="flex items-center gap-2.5">
-        <img src={logoUrl} alt="Soltech Energy logo" className="h-9 w-9 rounded-xl" />
+        {logoUrl ? (
+          <img
+            src={logoUrl}
+            alt="Soltech Energy logo"
+            className="h-9 w-9 rounded-xl object-contain"
+          />
+        ) : (
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-400 text-lg font-bold">
+            ☀️
+          </div>
+        )}
         <div className="leading-tight">
-          <p className="font-display text-sm font-bold text-primary">Soltech Energy</p>
-          <p className="text-[11px] text-muted-foreground">Solar Savings Calculator</p>
+          <p className="font-display text-sm font-bold text-primary">
+            Soltech Energy
+          </p>
+          <p className="text-[11px] text-muted-foreground">
+            Solar Savings Calculator
+          </p>
         </div>
       </div>
       <span className="rounded-full bg-solar/15 px-3 py-1 text-[11px] font-semibold text-solar-foreground">
