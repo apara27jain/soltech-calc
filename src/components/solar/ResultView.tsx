@@ -88,7 +88,7 @@ export function ResultView({
       </div>
 
       <div className="mt-5 space-y-3">
-        <a href={quoteLink} target="_blank" rel="noopener noreferrer" className="block">
+        <a href= "https://soltech-energy-get-quote-form.vercel.app/" target="_blank" rel="noopener noreferrer" className="block">
           <PrimaryButton variant="solar">Get a Free Quote</PrimaryButton>
         </a>
         <a
