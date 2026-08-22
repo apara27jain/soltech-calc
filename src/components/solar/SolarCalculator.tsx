@@ -67,14 +67,6 @@ export function SolarCalculator() {
     setStep((s) => Math.max(0, s - 1));
   };
 
-  const validateLocation = () => {
-    const next: Record<string, string> = {};
-    if (answers.pinCode && !/^\d{6}$/.test(answers.pinCode.trim()))
-      next["pinCode"] = "PIN code should be 6 digits";
-    setErrors(next);
-    return Object.keys(next).length === 0;
-  };
-
   const validateContact = () => {
   const next: Record<string, string> = {};
   if (answers.fullName.trim().length < 2) {
@@ -91,53 +83,63 @@ export function SolarCalculator() {
 };
 
   const handleSubmit = async () => {
-    if (submitting || !validateContact()) return;
-    if (!answers.billRange || !answers.terraceSize || !answers.roofType) return;
+  if (submitting || !validateContact()) return;
 
-    setSubmitting(true);
-    setSubmitError(null);
+  if (!answers.billRange || !answers.terraceSize || !answers.roofType) {
+    return;
+  }
 
-    const calc = calculateSolar({
-      billRange: answers.billRange,
-      terraceSize: answers.terraceSize,
-      roofType: answers.roofType,
+  setSubmitting(true);
+  setSubmitError(null);
+
+  const calc = calculateSolar({
+    billRange: answers.billRange,
+    terraceSize: answers.terraceSize,
+    roofType: answers.roofType,
+  });
+  setResult(calc);
+  setWhatsappStatus("not_configured");
+  setWaMessage("");
+  setStep(8);
+
+  try {
+    const params = new URLSearchParams(window.location.search);
+
+    const res = await send({
+      data: {
+        fullName: answers.fullName.trim(),
+        whatsappNumber: answers.whatsappNumber.replace(/\D/g, ""),
+        pinCode: answers.pinCode.trim(),
+
+        timeline: SOLAR_CONFIG.timelines[answers.timeline!].label,
+        roofType: SOLAR_CONFIG.roofTypes[answers.roofType].label,
+        terraceSize: SOLAR_CONFIG.terraceSizes[answers.terraceSize].label,
+        billRange: SOLAR_CONFIG.billRanges[answers.billRange].label,
+
+        recommendedKw: calc.recommendedKw,
+        monthlyGenerationKwh: calc.monthlyGenerationKwh,
+        monthlySavings: calc.monthlySavings,
+        annualSavings: calc.annualSavings,
+        fiveYearSavings: calc.fiveYearSavings,
+
+        source: params.get("source") ?? "",
+        campaign: params.get("campaign") ?? params.get("utm_campaign") ?? "",
+      },
     });
 
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const res = await send({
-        data: {
-          fullName: answers.fullName.trim(),
-          whatsappNumber: answers.whatsappNumber.replace(/\s|-/g, ""),
-          pinCode: answers.pinCode.trim(),
-          timeline: SOLAR_CONFIG.timelines[answers.timeline!].label,
-          roofType: SOLAR_CONFIG.roofTypes[answers.roofType].label,
-          terraceSize: SOLAR_CONFIG.terraceSizes[answers.terraceSize].label,
-          billRange: SOLAR_CONFIG.billRanges[answers.billRange].label,
-          recommendedKw: calc.recommendedKw,
-          monthlyGenerationKwh: calc.monthlyGenerationKwh,
-          monthlySavings: calc.monthlySavings,
-          annualSavings: calc.annualSavings,
-          fiveYearSavings: calc.fiveYearSavings,
-          source: params.get("source") ?? "",
-          campaign: params.get("campaign") ?? params.get("utm_campaign") ?? "",
-        },
-      });
-      setResult(calc);
-      setWhatsappStatus(res.whatsappStatus);
-      setWaMessage(res.message);
-      setStep(8);
-    } catch (err) {
-      console.error(err);
-      setSubmitError(
-        err instanceof Error
-          ? err.message
-          : "Something went wrong. Please check your details and try again.",
-      );
-    } finally {
-      setSubmitting(false);
-    }
-  };
+    setWhatsappStatus(res.whatsappStatus);
+    setWaMessage(res.message);
+  } catch (err) {
+    console.error("Lead submission failed:", err);
+
+    // Do NOT take the customer away from the result screen.
+    // Their calculation is already complete.
+    setWhatsappStatus("not_configured");
+    setWaMessage("");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   const restart = () => {
     setAnswers(emptyAnswers);
