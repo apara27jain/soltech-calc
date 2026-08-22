@@ -69,7 +69,6 @@ export function SolarCalculator() {
 
   const validateLocation = () => {
     const next: Record<string, string> = {};
-    if (answers.city.trim().length < 2) next["city"] = "Please enter your city or area";
     if (answers.pinCode && !/^\d{6}$/.test(answers.pinCode.trim()))
       next["pinCode"] = "PIN code should be 6 digits";
     setErrors(next);
@@ -287,7 +286,7 @@ export function SolarCalculator() {
                       placeholder="98XXXXXXXX"
                       inputMode="numeric"
                       maxLength={10}
-                      autoComplete="tel"
+                      autoComplete="numeric"
                       />
                   </Field>
                   <Field label="PIN Code" error={errors["pinCode"]}>
