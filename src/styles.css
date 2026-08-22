@@ -202,3 +202,22 @@
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ADD THIS TO THE VERY BOTTOM OF YOUR CSS FILE */
+
+body {
+  background: radial-gradient(circle at 15% 15%, rgba(37, 99, 235, 0.35) 0%, transparent 45%),
+              radial-gradient(circle at 85% 85%, rgba(250, 204, 21, 0.35) 0%, transparent 45%),
+              radial-gradient(circle at 50% 50%, rgba(14, 165, 233, 0.20) 0%, transparent 60%),
+              linear-gradient(135deg, #EBF3FF 0%, #E0EDFF 50%, #FEF9C3 100%) !important;
+  background-attachment: fixed !important;
+  min-height: 100vh;
+}
+
+/* Translucent Glassmorphism Container */
+.bg-card, [class*="bg-card"] {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+}
