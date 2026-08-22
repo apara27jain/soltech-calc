@@ -76,17 +76,19 @@ export function SolarCalculator() {
   };
 
   const validateContact = () => {
-    const next: Record<string, string> = {};
-    if (answers.fullName.trim().length < 2) next["fullName"] = "Please enter your full name";
-      const digits = answers.whatsappNumber;
-      if (!/^[6-9]\d{9}$/.test(digits)) {
-        next["whatsappNumber"] = "Enter a valid 10-digit WhatsApp number";
-      }
-    if (!/^\d{6}$/.test(answers.pinCode.trim())) {
-      next["pinCode"] = "PIN code should be exactly 6 digits";
-      }
-    return Object.keys(next).length === 0;
-  };
+  const next: Record<string, string> = {};
+  if (answers.fullName.trim().length < 2) {
+    next["fullName"] = "Please enter your full name";
+  }
+  if (!/^[6-9]\d{9}$/.test(answers.whatsappNumber)) {
+    next["whatsappNumber"] = "Enter a valid 10-digit WhatsApp number";
+  }
+  if (!/^\d{6}$/.test(answers.pinCode.trim())) {
+    next["pinCode"] = "PIN code should be exactly 6 digits";
+  }
+  setErrors(next);
+  return Object.keys(next).length === 0;
+};
 
   const handleSubmit = async () => {
     if (submitting || !validateContact()) return;
@@ -286,7 +288,7 @@ export function SolarCalculator() {
                       placeholder="98XXXXXXXX"
                       inputMode="numeric"
                       maxLength={10}
-                      autoComplete="numeric"
+                      autoComplete="tel"
                       />
                   </Field>
                   <Field label="PIN Code" error={errors["pinCode"]}>
