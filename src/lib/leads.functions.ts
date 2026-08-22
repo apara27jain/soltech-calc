@@ -6,15 +6,14 @@ const leadSchema = z.object({
   whatsappNumber: z
     .string()
     .trim()
-    .regex(/^(\+?91)?[6-9]\d{9}$/, "Enter a valid 10-digit Indian mobile number"),
-  email: z.string().trim().email().max(255).optional().or(z.literal("")),
-  city: z.string().trim().min(2).max(120),
-  pinCode: z.string().trim().max(10).optional().or(z.literal("")),
-  landmark: z.string().trim().max(200).optional().or(z.literal("")),
+    .regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit Indian mobile number"),
+  pinCode: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, "PIN code should be exactly 6 digits"),
   timeline: z.string().trim().min(1).max(60),
   roofType: z.string().trim().min(1).max(60),
   terraceSize: z.string().trim().min(1).max(60),
-  powerCuts: z.string().trim().min(1).max(60),
   billRange: z.string().trim().min(1).max(60),
   recommendedKw: z.number().min(0).max(100),
   monthlyGenerationKwh: z.number().min(0).max(100000),
@@ -64,11 +63,11 @@ export const submitLead = createServerFn({ method: "POST" })
     const inr = (n: number) => `₹${Math.round(n).toLocaleString("en-IN")}`;
     await supabaseAdmin.from("lead_notifications").insert({
       lead_id: lead.id,
-      title: `New solar lead: ${data.fullName} (${data.city})`,
+      title: `New solar lead: ${data.fullName}`,
       body: [
         `Name: ${data.fullName}`,
         `Phone: ${data.whatsappNumber}`,
-        `Location: ${data.city}${data.pinCode ? ` - ${data.pinCode}` : ""}`,
+        `PIN Code: ${data.pinCode}`,
         `Timeline: ${data.timeline}`,
         `Roof type: ${data.roofType}`,
         `Terrace size: ${data.terraceSize}`,
