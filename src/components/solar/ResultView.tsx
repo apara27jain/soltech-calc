@@ -5,7 +5,6 @@ import { PrimaryButton } from "./ui";
 type Props = {
   result: CalcResult;
   name: string;
-  city: string;
   whatsappStatus: string;
   waMessage: string;
   onRestart: () => void;
@@ -14,7 +13,6 @@ type Props = {
 export function ResultView({
   result,
   name,
-  city,
   whatsappStatus,
   waMessage,
   onRestart,
@@ -22,7 +20,7 @@ export function ResultView({
   const businessWa = SOLAR_CONFIG.business.whatsappNumber;
   const selfLink = `https://wa.me/${businessWa}?text=${encodeURIComponent(waMessage)}`;
   const quoteLink = `https://wa.me/${businessWa}?text=${encodeURIComponent(
-    `Hi Soltech Energy, I'm ${name} from ${city}. I used your Solar Savings Calculator (${result.recommendedKw} kW recommended) and would like a free quote.`,
+    `Hi Soltech Energy, I'm ${name}. I used your Solar Savings Calculator (${result.recommendedKw} kW recommended) and would like a free quote.`,
   )}`;
 
   return (
@@ -98,9 +96,6 @@ export function ResultView({
           className="block"
         >
           <PrimaryButton variant="success">Talk to Soltech on WhatsApp</PrimaryButton>
-        </a>
-        <a href={selfLink} target="_blank" rel="noopener noreferrer" className="block">
-          <PrimaryButton variant="outline">Send result on WhatsApp</PrimaryButton>
         </a>
         <PrimaryButton variant="ghost" onClick={onRestart}>
           Start Again
