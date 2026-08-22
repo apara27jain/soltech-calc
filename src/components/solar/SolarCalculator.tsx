@@ -333,7 +333,6 @@ export function SolarCalculator() {
         <ResultView
           result={result}
           name={answers.fullName}
-          city={answers.city}
           whatsappStatus={whatsappStatus}
           waMessage={waMessage}
           onRestart={restart}
