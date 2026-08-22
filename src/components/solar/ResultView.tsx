@@ -42,8 +42,8 @@ export function ResultView({
             {result.recommendedKw} kW
           </p>
           <p className="mt-1 text-xs text-primary-foreground/70">
-            Estimated generation ≈ {result.monthlyGenerationKwh.toLocaleString("en-IN")}{" "}
-            units / month · {city}
+            Estimated generation ≈{" "}
+            {result.monthlyGenerationKwh.toLocaleString("en-IN")} units / month
           </p>
         </div>
       </div>
