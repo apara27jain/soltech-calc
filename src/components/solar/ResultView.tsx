@@ -18,43 +18,47 @@ export function ResultView({
   onRestart,
 }: Props) {
   const businessWa = SOLAR_CONFIG.business.whatsappNumber;
-  const selfLink = `https://wa.me/${businessWa}?text=${encodeURIComponent(waMessage)}`;
   const quoteLink = `https://wa.me/${businessWa}?text=${encodeURIComponent(
-    `Hi Soltech Energy, I'm ${name}. I used your Solar Savings Calculator (${result.recommendedKw} kW recommended) and would like a free quote.`,
+    `Hi Soltech Energy, I'm ${name}. I checked my Solar Potential (${result.recommendedKw} kW recommended) and want to talk to an expert.`
   )}`;
 
   return (
-    <div className="animate-step-in">
+    <div className="animate-step-in space-y-4">
+      {/* Top Banner Card */}
       <div className="rounded-3xl bg-gradient-hero p-6 text-primary-foreground shadow-elevated">
         <p className="text-xs font-semibold uppercase tracking-wider text-solar">
-          Estimate ready
+          Estimate Ready
         </p>
-        <h2 className="mt-2 text-2xl font-bold">Here's your estimated solar savings</h2>
-        <p className="mt-1.5 text-sm text-primary-foreground/75">
-          Based on the details you provided
+        <h2 className="mt-2 text-2xl font-bold">Your Solar Potential</h2>
+        <p className="mt-1.5 text-sm text-primary-foreground/80">
+          Based on the details you provided, here's an estimate of what your solar system could achieve.
         </p>
 
-        <div className="mt-5 rounded-2xl bg-primary-foreground/10 p-4 backdrop-blur">
+        <div className="mt-5 rounded-2xl bg-white/10 p-4 backdrop-blur-md border border-white/10">
           <p className="text-xs text-primary-foreground/70">
             Recommended Solar System Size
           </p>
-          <p className="font-display text-4xl font-extrabold text-solar">
+          <p className="font-display text-4xl font-extrabold text-solar mt-1">
             {result.recommendedKw} kW
           </p>
-          <p className="mt-1 text-xs text-primary-foreground/70">
+          <p className="mt-1.5 text-xs text-primary-foreground/70">
             Estimated generation ≈{" "}
-            {result.monthlyGenerationKwh.toLocaleString("en-IN")} units / month
+            <span className="font-semibold text-white">
+              {result.monthlyGenerationKwh.toLocaleString("en-IN")} units / month
+            </span>
           </p>
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
+      {/* Savings Metric Cards */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <SavingsCard label="Estimated Monthly Savings" value={formatINR(result.monthlySavings)} />
         <SavingsCard label="Estimated Annual Savings" value={formatINR(result.annualSavings)} />
         <SavingsCard label="Estimated 5-Year Savings" value={formatINR(result.fiveYearSavings)} />
       </div>
 
-      <div className="mt-4 rounded-2xl border-2 border-border bg-card p-5">
+      {/* Key Assumptions Card */}
+      <div className="rounded-2xl border border-blue-900/10 bg-white/80 p-5 shadow-sm backdrop-blur-md">
         <h3 className="text-sm font-bold text-foreground">Key assumptions used</h3>
         <ul className="mt-3 space-y-2">
           {result.assumptions.map((a) => (
@@ -64,42 +68,60 @@ export function ResultView({
             </li>
           ))}
         </ul>
-        <p className="mt-4 rounded-xl bg-muted p-3 text-xs leading-relaxed text-muted-foreground">
-          These figures are indicative estimates and are not guaranteed. Actual savings may
-          vary based on electricity consumption, roof orientation, shading, tariff, system
-          design and site conditions.
+        <p className="mt-4 rounded-xl bg-muted/60 p-3 text-xs leading-relaxed text-muted-foreground">
+          These figures are indicative estimates. Actual savings may vary based on consumption, roof orientation, shading, and local tariffs.
         </p>
       </div>
 
-      <div className="mt-4 rounded-2xl border-2 border-success/25 bg-success/5 p-4 text-sm text-foreground">
+      {/* WhatsApp Delivery Status Banner */}
+      <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-foreground backdrop-blur-md">
         {whatsappStatus === "sent" ? (
           <p>
-            ✅ Your estimate has been sent to your WhatsApp number. Our team will reach out
-            shortly.
+            ✅ Your estimate has been sent to your WhatsApp number. Our team will reach out shortly.
           </p>
         ) : (
           <p>
-            ✅ Your details are saved and our team has been notified. You can also send this
-            estimate to yourself on WhatsApp below.
+            ✅ Your estimate is ready. Connect directly with our experts on WhatsApp to get your accurate rooftop quotation.
           </p>
         )}
       </div>
 
-      <div className="mt-5 space-y-3">
-        <a href= "https://soltech-energy-get-quote-form.vercel.app/" target="_blank" rel="noopener noreferrer" className="block">
-          <PrimaryButton variant="solar">Get a Free Quote</PrimaryButton>
-        </a>
-        <a
-          href={`https://wa.me/${businessWa}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-        >
-          <PrimaryButton variant="success">Talk to Soltech on WhatsApp</PrimaryButton>
-        </a>
-        <PrimaryButton variant="ghost" onClick={onRestart}>
-          Start Again
-        </PrimaryButton>
+      {/* Lead Generation Next Steps */}
+      <div className="rounded-2xl border border-blue-900/10 bg-white/80 p-5 text-center shadow-sm backdrop-blur-md space-y-3">
+        <p className="text-sm font-bold text-foreground">
+          Want to know exactly how much you can save?
+        </p>
+        <p className="text-xs text-muted-foreground">
+          Our solar experts can help you find the right system for your home and provide a personalized estimate.
+        </p>
+
+        <div className="pt-2 space-y-2.5">
+          <a
+            href={quoteLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full"
+          >
+            <PrimaryButton variant="solar">Talk to a Solar Expert</PrimaryButton>
+          </a>
+          
+          <a
+            href="https://soltech-energy-get-quote-form.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-full"
+          >
+            <PrimaryButton variant="ghost">Get Detailed Quotation Sheet</PrimaryButton>
+          </a>
+
+          <button
+            type="button"
+            onClick={onRestart}
+            className="w-full py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
+            ← Recalculate Savings
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -107,9 +129,9 @@ export function ResultView({
 
 function SavingsCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border-2 border-success/20 bg-card p-4 shadow-card">
+    <div className="rounded-2xl border border-blue-900/10 bg-white/80 p-4 shadow-sm backdrop-blur-md">
       <p className="text-xs font-medium text-muted-foreground">{label}</p>
-      <p className="mt-1 font-display text-2xl font-extrabold text-success">{value}</p>
+      <p className="mt-1 font-display text-2xl font-extrabold text-emerald-600">{value}</p>
     </div>
   );
 }
