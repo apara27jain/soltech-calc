@@ -92,50 +92,50 @@ const handleSubmit = async () => {
     setSubmitting(true);
     setSubmitError(null);
 
-    // 1. Calculate local solar figures immediately
+    // 1. Safe field extraction (prevents .trim() on undefined)
+    const safeName = (answers.fullName || "").trim();
+    const safePhone = (answers.whatsappNumber || "").replace(/\D/g, "");
+    const safePin = (answers.pinCode || "").trim();
+
+    // 2. Calculate local solar figures immediately
     const calc = calculateSolar({
       billRange: answers.billRange,
       terraceSize: answers.terraceSize,
       roofType: answers.roofType,
     });
 
-    // 2. Render the result screen right away
+    // 3. Render the result screen instantly
     setResult(calc);
     setWhatsappStatus("not_configured");
     setWaMessage("");
     setStep(8);
     setSubmitting(false);
 
-    // 3. Send lead data asynchronously in the background
+    // 4. Send lead data asynchronously in background
     try {
       const params = new URLSearchParams(window.location.search);
-
       const timelineLabel = answers.timeline
-        ? SOLAR_CONFIG.timelines[answers.timeline]?.label
+        ? SOLAR_CONFIG.timelines[answers.timeline]?.label ?? "Flexible"
         : "Flexible";
 
       const res = await send({
         data: {
-          fullName: answers.fullName.trim(),
-          whatsappNumber: answers.whatsappNumber.replace(/\D/g, ""),
-          pinCode: answers.pinCode.trim(),
-
+          fullName: safeName,
+          whatsappNumber: safePhone,
+          pinCode: safePin,
           timeline: timelineLabel,
           roofType: SOLAR_CONFIG.roofTypes[answers.roofType].label,
           terraceSize: SOLAR_CONFIG.terraceSizes[answers.terraceSize].label,
           billRange: SOLAR_CONFIG.billRanges[answers.billRange].label,
-
           recommendedKw: calc.recommendedKw,
           monthlyGenerationKwh: calc.monthlyGenerationKwh,
           monthlySavings: calc.monthlySavings,
           annualSavings: calc.annualSavings,
           fiveYearSavings: calc.fiveYearSavings,
-
           source: params.get("source") ?? "",
           campaign: params.get("campaign") ?? params.get("utm_campaign") ?? "",
         },
       });
-
       if (res?.whatsappStatus) {
         setWhatsappStatus(res.whatsappStatus);
       }
@@ -146,6 +146,7 @@ const handleSubmit = async () => {
       console.error("Background lead save error:", err);
     }
   };
+    
   const restart = () => {
     setAnswers(emptyAnswers);
     setResult(null);
