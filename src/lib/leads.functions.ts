@@ -39,14 +39,10 @@ export const submitLead = createServerFn({ method: "POST" })
       .insert({
         full_name: data.fullName,
         whatsapp_number: data.whatsappNumber,
-        email: data.email || null,
-        city: data.city,
         pin_code: data.pinCode || null,
-        landmark: data.landmark || null,
         timeline: data.timeline,
         roof_type: data.roofType,
         terrace_size: data.terraceSize,
-        power_cuts: data.powerCuts,
         bill_range: data.billRange,
         recommended_kw: data.recommendedKw,
         monthly_generation_kwh: data.monthlyGenerationKwh,
@@ -72,12 +68,10 @@ export const submitLead = createServerFn({ method: "POST" })
       body: [
         `Name: ${data.fullName}`,
         `Phone: ${data.whatsappNumber}`,
-        `Email: ${data.email || "—"}`,
-        `Location: ${data.city}${data.pinCode ? ` - ${data.pinCode}` : ""}${data.landmark ? ` (${data.landmark})` : ""}`,
+        `Location: ${data.city}${data.pinCode ? ` - ${data.pinCode}` : ""}`,
         `Timeline: ${data.timeline}`,
         `Roof type: ${data.roofType}`,
         `Terrace size: ${data.terraceSize}`,
-        `Power cuts: ${data.powerCuts}`,
         `Monthly bill: ${data.billRange}`,
         `Recommended system: ${data.recommendedKw} kW`,
         `Estimated monthly savings: ${inr(data.monthlySavings)}`,
@@ -92,7 +86,6 @@ export const submitLead = createServerFn({ method: "POST" })
       recommendedKw: data.recommendedKw,
       monthlySavings: data.monthlySavings,
       annualSavings: data.annualSavings,
-      city: data.city,
     });
 
     const result = await sendWhatsAppMessage(data.whatsappNumber, message, [
@@ -100,7 +93,6 @@ export const submitLead = createServerFn({ method: "POST" })
       String(data.recommendedKw),
       inr(data.monthlySavings),
       inr(data.annualSavings),
-      data.city,
     ]);
 
     await supabaseAdmin
