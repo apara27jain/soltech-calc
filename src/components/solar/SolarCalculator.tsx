@@ -6,7 +6,6 @@ import { calculateSolar, type CalcResult } from "@/lib/solar-calc";
 import {
   SOLAR_CONFIG,
   type BillRangeKey,
-  type PowerCutKey,
   type RoofTypeKey,
   type TerraceSizeKey,
   type TimelineKey,
@@ -22,29 +21,22 @@ import {
   inputClass,
 } from "./ui";
 
-const TOTAL_STEPS = 7;
+const TOTAL_STEPS = 5;
 
 type Answers = {
   timeline?: TimelineKey;
   roofType?: RoofTypeKey;
   terraceSize?: TerraceSizeKey;
-  powerCuts?: PowerCutKey;
   billRange?: BillRangeKey;
-  city: string;
   pinCode: string;
-  landmark: string;
   fullName: string;
   whatsappNumber: string;
-  email: string;
 };
 
 const emptyAnswers: Answers = {
-  city: "",
   pinCode: "",
-  landmark: "",
   fullName: "",
   whatsappNumber: "",
-  email: "",
 };
 
 const entries = <T extends Record<string, { label: string; helper?: string }>>(obj: T) =>
@@ -87,13 +79,13 @@ export function SolarCalculator() {
   const validateContact = () => {
     const next: Record<string, string> = {};
     if (answers.fullName.trim().length < 2) next["fullName"] = "Please enter your full name";
-    const digits = answers.whatsappNumber.replace(/\D/g, "");
-    const valid =
-      /^[6-9]\d{9}$/.test(digits) || /^91[6-9]\d{9}$/.test(digits);
-    if (!valid) next["whatsappNumber"] = "Enter a valid 10-digit WhatsApp number";
-    if (answers.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(answers.email.trim()))
-      next["email"] = "Enter a valid email address";
-    setErrors(next);
+      const digits = answers.whatsappNumber;
+      if (!/^[6-9]\d{9}$/.test(digits)) {
+        next["whatsappNumber"] = "Enter a valid 10-digit WhatsApp number";
+      }
+    if (!/^\d{6}$/.test(answers.pinCode.trim())) {
+      next["pinCode"] = "PIN code should be exactly 6 digits";
+      }
     return Object.keys(next).length === 0;
   };
 
@@ -108,7 +100,6 @@ export function SolarCalculator() {
       billRange: answers.billRange,
       terraceSize: answers.terraceSize,
       roofType: answers.roofType,
-      city: answers.city,
     });
 
     try {
@@ -117,14 +108,10 @@ export function SolarCalculator() {
         data: {
           fullName: answers.fullName.trim(),
           whatsappNumber: answers.whatsappNumber.replace(/\s|-/g, ""),
-          email: answers.email.trim(),
-          city: answers.city.trim(),
           pinCode: answers.pinCode.trim(),
-          landmark: answers.landmark.trim(),
           timeline: SOLAR_CONFIG.timelines[answers.timeline!].label,
           roofType: SOLAR_CONFIG.roofTypes[answers.roofType].label,
           terraceSize: SOLAR_CONFIG.terraceSizes[answers.terraceSize].label,
-          powerCuts: SOLAR_CONFIG.powerCuts[answers.powerCuts!].label,
           billRange: SOLAR_CONFIG.billRanges[answers.billRange].label,
           recommendedKw: calc.recommendedKw,
           monthlyGenerationKwh: calc.monthlyGenerationKwh,
@@ -183,7 +170,7 @@ export function SolarCalculator() {
           Start Calculation
         </PrimaryButton>
         <p className="text-center text-[11px] text-primary-foreground/60">
-          7 quick questions · Instant Savings Calculation
+          5 quick questions · Instant Savings Calculation
         </p>
       </div>
     </section>
@@ -256,25 +243,6 @@ export function SolarCalculator() {
             {step === 4 ? (
               <>
                 <QuestionHead
-                  title="How often do power cuts disturb you?"
-                  helper="So we can suggest the right system for you."
-                />
-                <div className="space-y-3">
-                  {entries(SOLAR_CONFIG.powerCuts).map(([key, opt]) => (
-                    <OptionCard
-                      key={key}
-                      label={opt.label}
-                      selected={answers.powerCuts === key}
-                      onClick={() => pick("powerCuts", key as PowerCutKey)}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : null}
-
-            {step === 5 ? (
-              <>
-                <QuestionHead
                   title="What's your average monthly electricity bill?"
                   helper="This drives your savings estimate."
                 />
@@ -291,58 +259,11 @@ export function SolarCalculator() {
               </>
             ) : null}
 
-            {step === 6 ? (
+            {step === 5 ? (
               <>
                 <QuestionHead
-                  title="Where is your home located?"
-                  helper="Location affects sunlight hours and system design."
-                />
-                <div className="space-y-4">
-                  <Field label="City / Location" error={errors["city"]}>
-                    <input
-                      className={inputClass}
-                      value={answers.city}
-                      onChange={(e) => set("city", e.target.value)}
-                      placeholder="e.g. Jaipur"
-                      maxLength={120}
-                      autoComplete="address-level2"
-                    />
-                  </Field>
-                  <Field label="PIN Code" optional error={errors["pinCode"]}>
-                    <input
-                      className={inputClass}
-                      value={answers.pinCode}
-                      onChange={(e) => set("pinCode", e.target.value)}
-                      placeholder="302020"
-                      inputMode="numeric"
-                      maxLength={6}
-                    />
-                  </Field>
-                  <Field label="Landmark" optional>
-                    <input
-                      className={inputClass}
-                      value={answers.landmark}
-                      onChange={(e) => set("landmark", e.target.value)}
-                      placeholder="Near…"
-                      maxLength={200}
-                    />
-                  </Field>
-                  <PrimaryButton
-                    onClick={() => {
-                      if (validateLocation()) setStep(7);
-                    }}
-                  >
-                    Continue
-                  </PrimaryButton>
-                </div>
-              </>
-            ) : null}
-
-            {step === 7 ? (
-              <>
-                <QuestionHead
-                  title="Where should we send your savings estimate?"
-                  helper="We'll share your estimate on WhatsApp."
+                  title="Almost there!"
+                  helper="Enter your details to see your personalized solar savings estimate."
                 />
                 <div className="space-y-4">
                   <Field label="Full Name" error={errors["fullName"]}>
@@ -359,23 +280,29 @@ export function SolarCalculator() {
                     <input
                       className={inputClass}
                       value={answers.whatsappNumber}
-                      onChange={(e) => set("whatsappNumber", e.target.value)}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "").slice(0, 10);
+                        set("whatsappNumber", value);
+                      }}
                       placeholder="98XXXXXXXX"
-                      inputMode="tel"
-                      maxLength={15}
+                      inputMode="numeric"
+                      maxLength={10}
                       autoComplete="tel"
-                    />
+                      />
                   </Field>
-                  <Field label="Email" optional error={errors["email"]}>
+                  <Field label="PIN Code" error={errors["pinCode"]}>
                     <input
                       className={inputClass}
-                      value={answers.email}
-                      onChange={(e) => set("email", e.target.value)}
-                      placeholder="you@example.com"
-                      inputMode="email"
-                      maxLength={255}
-                      autoComplete="email"
-                    />
+                      value={answers.pinCode}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+                        set("pinCode", value);
+                      }}
+                      placeholder="302020"
+                      inputMode="numeric"
+                      maxLength={6}
+                      autoComplete="postal-code"
+                      />
                   </Field>
                   {submitError ? (
                     <p className="rounded-xl bg-destructive/10 p-3 text-sm text-destructive">
