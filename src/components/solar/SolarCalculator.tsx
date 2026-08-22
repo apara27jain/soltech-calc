@@ -82,7 +82,7 @@ export function SolarCalculator() {
   return Object.keys(next).length === 0;
 };
 
-  const handleSubmit = async () => {
+const handleSubmit = async () => {
   if (submitting || !validateContact()) return;
 
   if (!answers.billRange || !answers.terraceSize || !answers.roofType) {
@@ -92,14 +92,18 @@ export function SolarCalculator() {
   setSubmitting(true);
   setSubmitError(null);
 
+  // 1. Calculate local solar figures immediately
   const calc = calculateSolar({
     billRange: answers.billRange,
     terraceSize: answers.terraceSize,
     roofType: answers.roofType,
   });
+
   setResult(calc);
   setWhatsappStatus("not_configured");
   setWaMessage("");
+
+  // 2. Advance directly to the ResultView step
   setStep(8);
 
   try {
@@ -111,7 +115,8 @@ export function SolarCalculator() {
         whatsappNumber: answers.whatsappNumber.replace(/\D/g, ""),
         pinCode: answers.pinCode.trim(),
 
-        timeline: SOLAR_CONFIG.timelines[answers.timeline!].label,
+        timeline:
+          SOLAR_CONFIG.timelines[answers.timeline ?? "within_1_month"].label,
         roofType: SOLAR_CONFIG.roofTypes[answers.roofType].label,
         terraceSize: SOLAR_CONFIG.terraceSizes[answers.terraceSize].label,
         billRange: SOLAR_CONFIG.billRanges[answers.billRange].label,
@@ -131,9 +136,7 @@ export function SolarCalculator() {
     setWaMessage(res.message);
   } catch (err) {
     console.error("Lead submission failed:", err);
-
-    // Do NOT take the customer away from the result screen.
-    // Their calculation is already complete.
+    // Keep user on step 8 even if server lead storage fails
     setWhatsappStatus("not_configured");
     setWaMessage("");
   } finally {
