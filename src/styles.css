@@ -159,7 +159,10 @@
 }
 
 :root {
-  --gradient-hero: linear-gradient(150deg, oklch(0.418 0.101 251.3) 0%, oklch(0.3 0.08 254) 55%, oklch(0.32 0.09 250) 100%);
+  --gradient-app: radial-gradient(circle at 8% 10%, rgba(30, 110, 235, 0.08) 0%, transparent 32%),
+    radial-gradient(circle at 92% 88%, rgba(250, 190, 45, 0.07) 0%, transparent 30%),
+    linear-gradient(135deg, #FFFFFF 0%, #F8FBFF 52%, #FFFDF7 100%);
+  --gradient-hero: linear-gradient(135deg, oklch(0.99 0.008 240) 0%, oklch(1 0 0) 55%, oklch(0.995 0.01 90) 100%);
   --gradient-solar: linear-gradient(100deg, var(--solar) 0%, oklch(0.86 0.15 92) 100%);
   --shadow-card: 0 8px 30px -12px oklch(0.418 0.101 251.3 / 0.25);
   --shadow-elevated: 0 18px 45px -20px oklch(0.418 0.101 251.3 / 0.4);
