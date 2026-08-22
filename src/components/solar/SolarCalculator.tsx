@@ -83,67 +83,69 @@ export function SolarCalculator() {
 };
 
 const handleSubmit = async () => {
-  if (submitting || !validateContact()) return;
+    if (submitting || !validateContact()) return;
 
-  if (!answers.billRange || !answers.terraceSize || !answers.roofType) {
-    return;
-  }
+    if (!answers.billRange || !answers.terraceSize || !answers.roofType) {
+      return;
+    }
 
-  setSubmitting(true);
-  setSubmitError(null);
+    setSubmitting(true);
+    setSubmitError(null);
 
-  // 1. Calculate local solar figures immediately
-  const calc = calculateSolar({
-    billRange: answers.billRange,
-    terraceSize: answers.terraceSize,
-    roofType: answers.roofType,
-  });
-
-  setResult(calc);
-  setWhatsappStatus("not_configured");
-  setWaMessage("");
-
-  // 2. Advance directly to the ResultView step
-  setStep(8);
-
-  try {
-    const params = new URLSearchParams(window.location.search);
-
-    const res = await send({
-      data: {
-        fullName: answers.fullName.trim(),
-        whatsappNumber: answers.whatsappNumber.replace(/\D/g, ""),
-        pinCode: answers.pinCode.trim(),
-
-        timeline:
-          SOLAR_CONFIG.timelines[answers.timeline ?? "within_1_month"].label,
-        roofType: SOLAR_CONFIG.roofTypes[answers.roofType].label,
-        terraceSize: SOLAR_CONFIG.terraceSizes[answers.terraceSize].label,
-        billRange: SOLAR_CONFIG.billRanges[answers.billRange].label,
-
-        recommendedKw: calc.recommendedKw,
-        monthlyGenerationKwh: calc.monthlyGenerationKwh,
-        monthlySavings: calc.monthlySavings,
-        annualSavings: calc.annualSavings,
-        fiveYearSavings: calc.fiveYearSavings,
-
-        source: params.get("source") ?? "",
-        campaign: params.get("campaign") ?? params.get("utm_campaign") ?? "",
-      },
+    // 1. Calculate local solar figures immediately
+    const calc = calculateSolar({
+      billRange: answers.billRange,
+      terraceSize: answers.terraceSize,
+      roofType: answers.roofType,
     });
 
-    setWhatsappStatus(res.whatsappStatus);
-    setWaMessage(res.message);
-  } catch (err) {
-    console.error("Lead submission failed:", err);
-    // Keep user on step 8 even if server lead storage fails
+    // 2. Render the result screen right away
+    setResult(calc);
     setWhatsappStatus("not_configured");
     setWaMessage("");
-  } finally {
+    setStep(8);
     setSubmitting(false);
-  }
-};
 
+    // 3. Send lead data asynchronously in the background
+    try {
+      const params = new URLSearchParams(window.location.search);
+
+      const timelineLabel = answers.timeline
+        ? SOLAR_CONFIG.timelines[answers.timeline]?.label
+        : "Flexible";
+
+      const res = await send({
+        data: {
+          fullName: answers.fullName.trim(),
+          whatsappNumber: answers.whatsappNumber.replace(/\D/g, ""),
+          pinCode: answers.pinCode.trim(),
+
+          timeline: timelineLabel,
+          roofType: SOLAR_CONFIG.roofTypes[answers.roofType].label,
+          terraceSize: SOLAR_CONFIG.terraceSizes[answers.terraceSize].label,
+          billRange: SOLAR_CONFIG.billRanges[answers.billRange].label,
+
+          recommendedKw: calc.recommendedKw,
+          monthlyGenerationKwh: calc.monthlyGenerationKwh,
+          monthlySavings: calc.monthlySavings,
+          annualSavings: calc.annualSavings,
+          fiveYearSavings: calc.fiveYearSavings,
+
+          source: params.get("source") ?? "",
+          campaign: params.get("campaign") ?? params.get("utm_campaign") ?? "",
+        },
+      });
+
+      if (res?.whatsappStatus) {
+        setWhatsappStatus(res.whatsappStatus);
+      }
+      if (res?.message) {
+        setWaMessage(res.message);
+      }
+    } catch (err) {
+      console.error("Background lead save error:", err);
+    }
+  };
   const restart = () => {
     setAnswers(emptyAnswers);
     setResult(null);
