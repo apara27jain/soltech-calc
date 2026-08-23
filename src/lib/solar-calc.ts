@@ -75,15 +75,16 @@ export function calculateSolar(input: CalcInput): CalcResult {
   const isSubsidyEnabled = c.subsidy?.enabled ?? false;
   const subsidyAmount = c.subsidy?.amount ?? 0;
 
+  const annualKwh = Math.round(monthlyGenerationKwh * 12);
+  const co2Tons = ((annualKwh * 0.82) / 1000).toFixed(1);
+  const treesPlanted = Math.round(annualKwh * 0.04);
+
   const assumptions = [
-    `Electricity tariff of ₹${c.tariffPerKwh}/unit`,
-    `Conservative generation of ${c.generationPerKwPerDay} units per kW per day`,
-    `${Math.round(c.selfConsumptionFactor * 100)}% of generated units offset your bill`,
-    `Approx. ${c.areaPerKwSqFt} sq. ft. of shadow-free roof area per kW`,
-    `${roof.label} structure factor applied`,
-    isSubsidyEnabled
-      ? `Subsidy benefit of ₹${subsidyAmount.toLocaleString("en-IN")} included`
-      : "No government subsidy included in these figures",
+    `Electricity rate calculated at ₹${c.tariffPerKwh}/unit`,
+    `Requires ~${c.areaPerKwSqFt} sq. ft. shadow-free roof area per kW`,
+    `Includes up to ₹78,000 central + ₹17,000 Rajasthan state subsidy (as per Govt T&C)`,
+    `🌱 Saves ~${co2Tons} tons of CO₂ emissions annually`,
+    `🌳 Equivalent to planting ~${treesPlanted} trees per year`,
   ];
 
   return {
