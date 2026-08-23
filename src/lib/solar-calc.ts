@@ -82,7 +82,7 @@ export function calculateSolar(input: CalcInput): CalcResult {
   const assumptions = [
     `Electricity rate calculated at ₹${c.tariffPerKwh}/unit`,
     `Requires ~${c.areaPerKwSqFt} sq. ft. shadow-free roof area per kW`,
-    `Includes up to ₹78,000 central + ₹17,000 Rajasthan state subsidy (as per Govt T&C)`,
+    `Excludes up to ₹78,000 central + ₹17,000 Rajasthan state subsidy (as per Govt T&C)`,
     `Saves ~${co2Tons} tons of CO₂ emissions annually`,
     `Equivalent to planting ~${treesPlanted} trees per year`,
   ];
