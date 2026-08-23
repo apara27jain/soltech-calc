@@ -169,7 +169,7 @@ export function SolarCalculator() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-xl px-4 pb-14">
+    <div className="mx-auto w-full max-w-md px-4 pb-14">
       <BrandHeader logoUrl="/soltech-logo.png" />
 
       {step === 0 ? (
