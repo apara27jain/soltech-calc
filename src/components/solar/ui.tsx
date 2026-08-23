@@ -9,7 +9,7 @@ export function BrandHeader({ logoUrl }: { logoUrl?: string }) {
           <img
             src={logoUrl}
             alt="Soltech Energy logo"
-            className="h-13 w-13 rounded-xl object-contain"
+            className="h-18 w-18 rounded-xl object-contain"
           />
         ) : (
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-400 text-lg font-bold">
