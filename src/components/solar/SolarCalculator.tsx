@@ -201,15 +201,9 @@ export function SolarCalculator() {
           <ProgressBar step={step} total={TOTAL_STEPS} />
 
           <div key={step} className="animate-step-in">
-            {step === 1 ? (
-              <>
-                <QuestionHead
-                  title="When are you planning to get solar?"
-                  helper="Tell us your expected timeline."
-                />
                 {step === 1 ? (
-  <>
-    <QuestionHead
+          <>
+            <QuestionHead
       title="When are you planning to get solar?"
       helper="Tell us your expected timeline."
     />
