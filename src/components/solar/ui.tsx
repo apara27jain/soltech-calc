@@ -120,8 +120,7 @@ export function PrimaryButton({
   onClick?: (() => void) | undefined;
   disabled?: boolean | undefined;
   type?: "button" | "submit";
-  variant?: "primary" | "solar" | "success" | "outline" | "ghost";
-  className?: string | undefined;
+  variant?: "primary" | "solar" | "success" | "outline" | "ghost" | "whatsapp" | "quote";  className?: string | undefined;
 }) 
 
 {
@@ -134,7 +133,12 @@ export function PrimaryButton({
       "bg-success text-success-foreground hover:bg-success/90 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:shadow-card shadow-card",
     outline:
       "border-2 border-primary/25 bg-card text-primary hover:bg-accent hover:border-primary/50 hover:-translate-y-0.5",
-    ghost: "text-muted-foreground hover:text-foreground",
+    ghost: 
+      "text-muted-foreground hover:text-foreground",
+    whatsapp: 
+      "bg-emerald-600 text-white font-bold hover:bg-emerald-700 shadow-md",
+    quote: 
+      "bg-amber-400 text-slate-950 font-bold hover:bg-amber-500 shadow-md",
   };
 
   return (
