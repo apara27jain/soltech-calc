@@ -85,17 +85,16 @@ export function SolarCalculator() {
 const handleSubmit = async () => {
   if (submitting) return;
 
-  // Validate contact details first
-  const isValidContact = validateContact();
+  // 1. Validate inputs first
+  const isContactValid = validateContact();
 
-  // Validate quiz answers
-  const nextErrors: Record<string, string> = { ...errors };
-  if (!answers.billRange) nextErrors["billRange"] = "Please select your electricity bill range";
+  const nextErrors: Record<string, string> = {};
+  if (!answers.billRange) nextErrors["billRange"] = "Please select your monthly bill";
   if (!answers.terraceSize) nextErrors["terraceSize"] = "Please select your terrace size";
   if (!answers.roofType) nextErrors["roofType"] = "Please select your roof type";
 
-  if (!isValidContact || !answers.billRange || !answers.terraceSize || !answers.roofType) {
-    setErrors(nextErrors);
+  if (!isContactValid || !answers.billRange || !answers.terraceSize || !answers.roofType) {
+    setErrors((prev) => ({ ...prev, ...nextErrors }));
     return;
   }
 
@@ -103,80 +102,65 @@ const handleSubmit = async () => {
   setSubmitError(null);
 
   try {
-    const safeName = (answers.fullName || "").trim();
-    const safePhone = (answers.whatsappNumber || "").replace(/\D/g, "");
-    const safePin = (answers.pinCode || "").trim();
+    const safeName = answers.fullName.trim();
+    const safePhone = answers.whatsappNumber.replace(/\D/g, "");
+    const safePin = answers.pinCode.trim();
 
-    // Calculate figures
+    // 2. Safe to calculate now (TypeScript knows these are defined)
+    const billRangeKey = answers.billRange;
+    const terraceSizeKey = answers.terraceSize;
+    const roofTypeKey = answers.roofType;
+
     const calc = calculateSolar({
-      billRange: answers.billRange,
-      terraceSize: answers.terraceSize,
-      roofType: answers.roofType,
+      billRange: billRangeKey,
+      terraceSize: terraceSizeKey,
+      roofType: roofTypeKey,
     });
 
-    // Render result view instantly
+    // 3. Move to result screen immediately
     setResult(calc);
     setWhatsappStatus("not_configured");
     setWaMessage("");
     setStep(8);
+
+    // 4. Fire-and-forget server function call
+    const params = new URLSearchParams(window.location.search);
+    const timelineLabel = answers.timeline
+      ? SOLAR_CONFIG.timelines[answers.timeline]?.label ?? "Flexible"
+      : "Flexible";
+
+    send({
+      data: {
+        fullName: safeName,
+        whatsappNumber: safePhone,
+        pinCode: safePin,
+        timeline: timelineLabel,
+        roofType: SOLAR_CONFIG.roofTypes[roofTypeKey].label,
+        terraceSize: SOLAR_CONFIG.terraceSizes[terraceSizeKey].label,
+        billRange: SOLAR_CONFIG.billRanges[billRangeKey].label,
+        recommendedKw: calc.recommendedKw,
+        monthlyGenerationKwh: calc.monthlyGenerationKwh,
+        monthlySavings: calc.monthlySavings,
+        annualSavings: calc.annualSavings,
+        fiveYearSavings: calc.fiveYearSavings,
+        source: params.get("source") ?? "",
+        campaign: params.get("campaign") ?? params.get("utm_campaign") ?? "",
+      },
+    })
+      .then((res) => {
+        if (res?.whatsappStatus) setWhatsappStatus(res.whatsappStatus);
+        if (res?.message) setWaMessage(res.message);
+      })
+      .catch((err) => {
+        console.error("Background lead save error:", err);
+      });
+
   } catch (err) {
-    console.error("Local calculation failed:", err);
-    setSubmitError("Failed to generate calculation. Please review your answers.");
+    console.error("Calculation Error:", err);
+    setSubmitError("Failed to generate calculation. Please ensure all options are selected.");
   } finally {
     setSubmitting(false);
   }
-
-  // Background lead save (fire-and-forget execution)
-  const params = new URLSearchParams(window.location.search);
-  const timelineLabel = answers.timeline
-    ? SOLAR_CONFIG.timelines[answers.timeline]?.label ?? "Flexible"
-    : "Flexible";
-
-  send({
-    data: {
-      fullName: (answers.fullName || "").trim(),
-      whatsappNumber: (answers.whatsappNumber || "").replace(/\D/g, ""),
-      pinCode: (answers.pinCode || "").trim(),
-      timeline: timelineLabel,
-      roofType: SOLAR_CONFIG.roofTypes[answers.roofType].label,
-      terraceSize: SOLAR_CONFIG.terraceSizes[answers.terraceSize].label,
-      billRange: SOLAR_CONFIG.billRanges[answers.billRange].label,
-      recommendedKw: calculateSolar({
-        billRange: answers.billRange,
-        terraceSize: answers.terraceSize,
-        roofType: answers.roofType,
-      }).recommendedKw,
-      monthlyGenerationKwh: calculateSolar({
-        billRange: answers.billRange,
-        terraceSize: answers.terraceSize,
-        roofType: answers.roofType,
-      }).monthlyGenerationKwh,
-      monthlySavings: calculateSolar({
-        billRange: answers.billRange,
-        terraceSize: answers.terraceSize,
-        roofType: answers.roofType,
-      }).monthlySavings,
-      annualSavings: calculateSolar({
-        billRange: answers.billRange,
-        terraceSize: answers.terraceSize,
-        roofType: answers.roofType,
-      }).annualSavings,
-      fiveYearSavings: calculateSolar({
-        billRange: answers.billRange,
-        terraceSize: answers.terraceSize,
-        roofType: answers.roofType,
-      }).fiveYearSavings,
-      source: params.get("source") ?? "",
-      campaign: params.get("campaign") ?? params.get("utm_campaign") ?? "",
-    },
-  })
-    .then((res) => {
-      if (res?.whatsappStatus) setWhatsappStatus(res.whatsappStatus);
-      if (res?.message) setWaMessage(res.message);
-    })
-    .catch((err) => {
-      console.error("Background lead save error:", err);
-    });
 };
     
   const restart = () => {
