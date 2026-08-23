@@ -51,7 +51,7 @@ export function ResultView({
       </div>
 
       {/* Savings Metric Cards */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
         <SavingsCard label="Estimated Monthly Savings" value={formatINR(result.monthlySavings)} />
         <SavingsCard label="Estimated Annual Savings" value={formatINR(result.annualSavings)} />
         <SavingsCard label="Estimated 5-Year Savings" value={formatINR(result.fiveYearSavings)} />
@@ -129,9 +129,9 @@ export function ResultView({
 
 function SavingsCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-blue-900/10 bg-white/80 p-4 shadow-sm backdrop-blur-md">
-      <p className="text-xs font-medium text-muted-foreground">{label}</p>
-      <p className="mt-1 font-display text-2xl font-extrabold text-emerald-600">{value}</p>
+    <div className="rounded-2xl border border-blue-900/10 bg-white/80 p-2.5 sm:p-4 text-center shadow-sm backdrop-blur-md">
+      <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">{label}</p>
+      <p className="mt-1 font-display text-base sm:text-2xl font-extrabold text-emerald-600 truncate">{value}</p>
     </div>
   );
 }
