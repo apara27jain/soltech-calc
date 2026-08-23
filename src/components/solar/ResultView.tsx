@@ -102,7 +102,7 @@ export function ResultView({
             rel="noopener noreferrer"
             className="block w-full"
           >
-            <PrimaryButton variant="solar">Talk to a Solar Expert</PrimaryButton>
+            <PrimaryButton variant="solar">Talk on Whatsapp</PrimaryButton>
           </a>
           
           <a
@@ -111,7 +111,7 @@ export function ResultView({
             rel="noopener noreferrer"
             className="block w-full"
           >
-            <PrimaryButton variant="ghost">Get Detailed Quotation Sheet</PrimaryButton>
+            <PrimaryButton variant="ghost">Get Free Quote</PrimaryButton>
           </a>
 
           <button
@@ -119,7 +119,7 @@ export function ResultView({
             onClick={onRestart}
             className="w-full py-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Recalculate Savings
+            ← Calculate Again
           </button>
         </div>
       </div>
