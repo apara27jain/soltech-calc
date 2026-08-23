@@ -23,7 +23,7 @@ export function ResultView({
   )}`;
 
   return (
-    <div className="animate-step-in space-y-4 max-w-xl mx-auto w-full">
+    <div className="animate-step-in space-y-4 -mx-4 sm:-mx-12 max-w-[calc(100%+2rem)] sm:max-w-[calc(100%+6rem)]"> 
       {/* Top Banner Card */}
       <div className="rounded-3xl bg-gradient-hero p-6 text-primary-foreground shadow-elevated">
         <p className="text-xs font-semibold uppercase tracking-wider text-solar">
@@ -96,14 +96,12 @@ export function ResultView({
         </p>
 
         <div className="pt-2 space-y-2.5">
-          <a href={quoteLink} target="_blank" rel="noopener noreferrer" className="block w-full">
-            <PrimaryButton variant="whatsapp">Talk on Whatsapp</PrimaryButton>
-          </a>
-
-          {/* Free Quote Button */}
-          <a href="https://soltech-energy-get-quote-form.vercel.app/" target="_blank" rel="noopener noreferrer" className="block w-full">
-            <PrimaryButton variant="quote">Get Free Quote</PrimaryButton>
-          </a>
+         <a href={quoteLink} target="_blank" rel="noopener noreferrer" className="block w-full">
+           <PrimaryButton variant="whatsapp">Talk on Whatsapp</PrimaryButton>
+         </a>
+         <a href="https://soltech-energy-get-quote-form.vercel.app/" target="_blank" rel="noopener noreferrer" className="block w-full">
+           <PrimaryButton variant="quote">Get Free Quote</PrimaryButton>
+         </a>
           
           <button
             type="button"
