@@ -207,8 +207,7 @@ export function SolarCalculator() {
                   title="When are you planning to get solar?"
                   helper="Tell us your expected timeline."
                 />
-                <div className="space-y-3">
-                  {entries(SOLAR_CONFIG.timelines).map(([key, opt]) => (
+                <div className="flex flex-col divide-y divide-gray-200/80 rounded-2xl border border-border/40 overflow-hidden">                  {entries(SOLAR_CONFIG.timelines).map(([key, opt]) => (
                     <OptionCard
                       key={key}
                       label={opt.label}
@@ -226,8 +225,7 @@ export function SolarCalculator() {
                   title="What type of roof do you have?"
                   helper="So we can plan the right structure for your home."
                 />
-                <div className="space-y-3">
-                  {entries(SOLAR_CONFIG.roofTypes).map(([key, opt]) => (
+                <div className="flex flex-col divide-y divide-gray-200/80 rounded-2xl border border-border/40 overflow-hidden">                  {entries(SOLAR_CONFIG.roofTypes).map(([key, opt]) => (
                     <OptionCard
                       key={key}
                       label={opt.label}
@@ -246,8 +244,7 @@ export function SolarCalculator() {
                   title="How big is your terrace?"
                   helper="This helps estimate how much you can save."
                 />
-                <div className="space-y-3">
-                  {entries(SOLAR_CONFIG.terraceSizes).map(([key, opt]) => (
+                <div className="flex flex-col divide-y divide-gray-200/80 rounded-2xl border border-border/40 overflow-hidden">                  {entries(SOLAR_CONFIG.terraceSizes).map(([key, opt]) => (
                     <OptionCard
                       key={key}
                       label={opt.label}
@@ -266,8 +263,7 @@ export function SolarCalculator() {
                   title="What's your average monthly electricity bill?"
                   helper="This drives your savings estimate."
                 />
-                <div className="space-y-3">
-                  {entries(SOLAR_CONFIG.billRanges).map(([key, opt]) => (
+                <div className="flex flex-col divide-y divide-gray-200/80 rounded-2xl border border-border/40 overflow-hidden">                  {entries(SOLAR_CONFIG.billRanges).map(([key, opt]) => (
                     <OptionCard
                       key={key}
                       label={opt.label}
