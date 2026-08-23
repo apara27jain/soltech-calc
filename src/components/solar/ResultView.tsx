@@ -23,7 +23,7 @@ export function ResultView({
   )}`;
 
   return (
-    <div className="animate-step-in space-y-4">
+    <div className="animate-step-in space-y-4 max-w-xl mx-auto w-full">
       {/* Top Banner Card */}
       <div className="rounded-3xl bg-gradient-hero p-6 text-primary-foreground shadow-elevated">
         <p className="text-xs font-semibold uppercase tracking-wider text-solar">
@@ -52,9 +52,9 @@ export function ResultView({
 
       {/* Savings Metric Cards */}
       <div className="grid grid-cols-3 gap-2 sm:gap-3">
-        <SavingsCard label="Estimated Monthly Savings" value={formatINR(result.monthlySavings)} />
-        <SavingsCard label="Estimated Annual Savings" value={formatINR(result.annualSavings)} />
-        <SavingsCard label="Estimated 5-Year Savings" value={formatINR(result.fiveYearSavings)} />
+        <SavingsCard label="Monthly Savings" value={formatINR(result.monthlySavings)} />
+        <SavingsCard label="Annual Savings" value={formatINR(result.annualSavings)} />
+        <SavingsCard label="5-Year Savings" value={formatINR(result.fiveYearSavings)} />
       </div>
 
       {/* Key Assumptions Card */}
@@ -96,24 +96,15 @@ export function ResultView({
         </p>
 
         <div className="pt-2 space-y-2.5">
-          <a
-            href={quoteLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full"
-          >
-            <PrimaryButton variant="solar">Talk on Whatsapp</PrimaryButton>
-          </a>
-          
-          <a
-            href="https://soltech-energy-get-quote-form.vercel.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block w-full"
-          >
-            <PrimaryButton variant="ghost">Get Free Quote</PrimaryButton>
+          <a href={quoteLink} target="_blank" rel="noopener noreferrer" className="block w-full">
+            <PrimaryButton variant="whatsapp">Talk on Whatsapp</PrimaryButton>
           </a>
 
+          {/* Free Quote Button */}
+          <a href="https://soltech-energy-get-quote-form.vercel.app/" target="_blank" rel="noopener noreferrer" className="block w-full">
+            <PrimaryButton variant="quote">Get Free Quote</PrimaryButton>
+          </a>
+          
           <button
             type="button"
             onClick={onRestart}
@@ -129,9 +120,9 @@ export function ResultView({
 
 function SavingsCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-blue-900/10 bg-white/80 p-2.5 sm:p-4 text-center shadow-sm backdrop-blur-md">
-      <p className="text-[10px] sm:text-xs font-medium text-muted-foreground truncate">{label}</p>
-      <p className="mt-1 font-display text-base sm:text-2xl font-extrabold text-emerald-600 truncate">{value}</p>
+    <div className="rounded-2xl border border-blue-900/10 bg-white/80 p-2 sm:p-4 text-center shadow-sm backdrop-blur-md min-w-0">
+      <p className="text-[10px] sm:text-xs font-semibold text-muted-foreground truncate">{label}</p>
+      <p className="mt-1 font-display text-sm sm:text-xl font-extrabold text-emerald-600 truncate">{value}</p>
     </div>
   );
 }
