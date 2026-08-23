@@ -44,7 +44,7 @@ const entries = <T extends Record<string, { label: string; helper?: string }>>(o
 
 export function SolarCalculator() {
   const send = useServerFn(submitLead);
-  const [step, setStep] = useState(0); // 0 = intro, 1..7 questions, 8 = result
+  const [step, setStep] = useState(0); // 0 = intro, 1..5 questions, 8 = result
   const [answers, setAnswers] = useState<Answers>(emptyAnswers);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
@@ -68,101 +68,98 @@ export function SolarCalculator() {
   };
 
   const validateContact = () => {
-  const next: Record<string, string> = {};
-  if (answers.fullName.trim().length < 2) {
-    next["fullName"] = "Please enter your full name";
-  }
-  if (!/^[6-9]\d{9}$/.test(answers.whatsappNumber)) {
-    next["whatsappNumber"] = "Enter a valid 10-digit WhatsApp number";
-  }
-  if (!/^\d{6}$/.test(answers.pinCode.trim())) {
-    next["pinCode"] = "PIN code should be exactly 6 digits";
-  }
-  setErrors(next);
-  return Object.keys(next).length === 0;
-};
+    const next: Record<string, string> = {};
+    if (answers.fullName.trim().length < 2) {
+      next["fullName"] = "Please enter your full name";
+    }
+    if (!/^[6-9]\d{9}$/.test(answers.whatsappNumber)) {
+      next["whatsappNumber"] = "Enter a valid 10-digit WhatsApp number";
+    }
+    if (!/^\d{6}$/.test(answers.pinCode.trim())) {
+      next["pinCode"] = "PIN code should be exactly 6 digits";
+    }
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
 
-const handleSubmit = async () => {
-  if (submitting) return;
+  const handleSubmit = async () => {
+    if (submitting) return;
 
-  // 1. Validate inputs first
-  const isContactValid = validateContact();
+    const isContactValid = validateContact();
 
-  const nextErrors: Record<string, string> = {};
-  if (!answers.billRange) nextErrors["billRange"] = "Please select your monthly bill";
-  if (!answers.terraceSize) nextErrors["terraceSize"] = "Please select your terrace size";
-  if (!answers.roofType) nextErrors["roofType"] = "Please select your roof type";
+    const nextErrors: Record<string, string> = {};
+    if (!answers.billRange) nextErrors["billRange"] = "Please select your monthly bill";
+    if (!answers.terraceSize) nextErrors["terraceSize"] = "Please select your terrace size";
+    if (!answers.roofType) nextErrors["roofType"] = "Please select your roof type";
 
-  if (!isContactValid || !answers.billRange || !answers.terraceSize || !answers.roofType) {
-    setErrors((prev) => ({ ...prev, ...nextErrors }));
-    return;
-  }
+    if (!isContactValid || !answers.billRange || !answers.terraceSize || !answers.roofType) {
+      setErrors((prev) => ({ ...prev, ...nextErrors }));
+      return;
+    }
 
-  setSubmitting(true);
-  setSubmitError(null);
+    setSubmitting(true);
+    setSubmitError(null);
 
-  try {
-    const safeName = answers.fullName.trim();
-    const safePhone = answers.whatsappNumber.replace(/\D/g, "");
-    const safePin = answers.pinCode.trim();
+    try {
+      const safeName = answers.fullName.trim();
+      const safePhone = answers.whatsappNumber.replace(/\D/g, "");
+      const safePin = answers.pinCode.trim();
 
-    // 2. Safe to calculate now (TypeScript knows these are defined)
-    const billRangeKey = answers.billRange;
-    const terraceSizeKey = answers.terraceSize;
-    const roofTypeKey = answers.roofType;
+      const billRangeKey = answers.billRange;
+      const terraceSizeKey = answers.terraceSize;
+      const roofTypeKey = answers.roofType;
 
-    const calc = calculateSolar({
-      billRange: billRangeKey,
-      terraceSize: terraceSizeKey,
-      roofType: roofTypeKey,
-    });
-
-    // 3. Move to result screen immediately
-    setResult(calc);
-    setWhatsappStatus("not_configured");
-    setWaMessage("");
-    setStep(8);
-
-    // 4. Fire-and-forget server function call
-    const params = new URLSearchParams(window.location.search);
-    const timelineLabel = answers.timeline
-      ? SOLAR_CONFIG.timelines[answers.timeline]?.label ?? "Flexible"
-      : "Flexible";
-
-    send({
-      data: {
-        fullName: safeName,
-        whatsappNumber: safePhone,
-        pinCode: safePin,
-        timeline: timelineLabel,
-        roofType: SOLAR_CONFIG.roofTypes[roofTypeKey].label,
-        terraceSize: SOLAR_CONFIG.terraceSizes[terraceSizeKey].label,
-        billRange: SOLAR_CONFIG.billRanges[billRangeKey].label,
-        recommendedKw: calc.recommendedKw,
-        monthlyGenerationKwh: calc.monthlyGenerationKwh,
-        monthlySavings: calc.monthlySavings,
-        annualSavings: calc.annualSavings,
-        fiveYearSavings: calc.fiveYearSavings,
-        source: params.get("source") ?? "",
-        campaign: params.get("campaign") ?? params.get("utm_campaign") ?? "",
-      },
-    })
-      .then((res) => {
-        if (res?.whatsappStatus) setWhatsappStatus(res.whatsappStatus);
-        if (res?.message) setWaMessage(res.message);
-      })
-      .catch((err) => {
-        console.error("Background lead save error:", err);
+      const calc = calculateSolar({
+        billRange: billRangeKey,
+        terraceSize: terraceSizeKey,
+        roofType: roofTypeKey,
       });
 
-  } catch (err) {
-    console.error("Calculation Error:", err);
-    setSubmitError("Failed to generate calculation. Please ensure all options are selected.");
-  } finally {
-    setSubmitting(false);
-  }
-};
-    
+      // Move to result screen state
+      setResult(calc);
+      setWhatsappStatus("not_configured");
+      setWaMessage("");
+      setStep(8);
+
+      const params = new URLSearchParams(window.location.search);
+      const timelineLabel = answers.timeline
+        ? SOLAR_CONFIG.timelines[answers.timeline]?.label ?? "Flexible"
+        : "Flexible";
+
+      send({
+        data: {
+          fullName: safeName,
+          whatsappNumber: safePhone,
+          pinCode: safePin,
+          timeline: timelineLabel,
+          roofType: SOLAR_CONFIG.roofTypes[roofTypeKey].label,
+          terraceSize: SOLAR_CONFIG.terraceSizes[terraceSizeKey].label,
+          billRange: SOLAR_CONFIG.billRanges[billRangeKey].label,
+          recommendedKw: calc.recommendedKw,
+          monthlyGenerationKwh: calc.monthlyGenerationKwh,
+          monthlySavings: calc.monthlySavings,
+          annualSavings: calc.annualSavings,
+          fiveYearSavings: calc.fiveYearSavings,
+          source: params.get("source") ?? "",
+          campaign: params.get("campaign") ?? params.get("utm_campaign") ?? "",
+        },
+      })
+        .then((res) => {
+          if (res?.whatsappStatus) setWhatsappStatus(res.whatsappStatus);
+          if (res?.message) setWaMessage(res.message);
+        })
+        .catch((err) => {
+          console.error("Background lead save error:", err);
+        });
+
+    } catch (err) {
+      console.error("Calculation Error:", err);
+      setSubmitError("Failed to generate calculation. Please ensure all options are selected.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const restart = () => {
     setAnswers(emptyAnswers);
     setResult(null);
@@ -176,29 +173,27 @@ const handleSubmit = async () => {
       <BrandHeader logoUrl="/soltech-logo.png" />
 
       {step === 0 ? (
-    <section className="animate-step-in mt-4 flex min-h-[560px] flex-col justify-center overflow-hidden rounded-3xl bg-gradient-hero p-7 text-center text-primary-foreground shadow-elevated">
-      {/* Top Aligned Text Content */}
-      <div className="flex flex-col items-center pt-2">
-        <span className="inline-flex items-center gap-2 rounded-full bg-solar/20 px-4 py-1.5 text-xs font-semibold text-solar">
-          ✦ 100% Free Savings Check
-        </span>
-        <h1 className="mt-6 w-full text-center text-4xl font-extrabold leading-tight px-4 sm:text-5xl">
-          Let's Calculate <br /> your <br /> Solar Savings
-        </h1>
-        <p className="mt-4 text-sm text-primary-foreground/80 max-w-sm">
-          See your estimated solar savings in less than 60 seconds.
-        </p>
-      </div>
-      {/* Bottom Aligned Button & Guarantee Disclaimer */}
-      <div className="mt-6 flex flex-col items-center gap-3">
-        <PrimaryButton variant="solar" onClick={() => setStep(1)} className="h-14 max-w-xs">
-          Start Calculation
-        </PrimaryButton>
-        <p className="text-center text-[11px] text-primary-foreground/60">
-          5 quick questions · Instant Savings Calculation
-        </p>
-      </div>
-    </section>
+        <section className="animate-step-in mt-4 flex min-h-[560px] flex-col justify-center overflow-hidden rounded-3xl bg-gradient-hero p-7 text-center text-primary-foreground shadow-elevated">
+          <div className="flex flex-col items-center pt-2">
+            <span className="inline-flex items-center gap-2 rounded-full bg-solar/20 px-4 py-1.5 text-xs font-semibold text-solar">
+              ✦ 100% Free Savings Check
+            </span>
+            <h1 className="mt-6 w-full text-center text-4xl font-extrabold leading-tight px-4 sm:text-5xl">
+              Let's Calculate <br /> your <br /> Solar Savings
+            </h1>
+            <p className="mt-4 text-sm text-primary-foreground/80 max-w-sm">
+              See your estimated solar savings in less than 60 seconds.
+            </p>
+          </div>
+          <div className="mt-6 flex flex-col items-center gap-3">
+            <PrimaryButton variant="solar" onClick={() => setStep(1)} className="h-14 max-w-xs">
+              Start Calculation
+            </PrimaryButton>
+            <p className="text-center text-[11px] text-primary-foreground/60">
+              5 quick questions · Instant Savings Calculation
+            </p>
+          </div>
+        </section>
       ) : null}
 
       {step >= 1 && step <= TOTAL_STEPS ? (
@@ -313,7 +308,7 @@ const handleSubmit = async () => {
                       inputMode="numeric"
                       maxLength={10}
                       autoComplete="tel"
-                      />
+                    />
                   </Field>
                   <Field label="PIN Code" error={errors["pinCode"]}>
                     <input
@@ -327,7 +322,7 @@ const handleSubmit = async () => {
                       inputMode="numeric"
                       maxLength={6}
                       autoComplete="postal-code"
-                      />
+                    />
                   </Field>
                   {submitError ? (
                     <p className="rounded-xl bg-destructive/10 p-3 text-sm text-destructive">
@@ -355,7 +350,8 @@ const handleSubmit = async () => {
         </section>
       ) : null}
 
-      {step === 8 && result ? (
+      {/* FIXED STEP rendering for result view */}
+      {step >= 6 && result ? (
         <ResultView
           result={result}
           name={answers.fullName}
