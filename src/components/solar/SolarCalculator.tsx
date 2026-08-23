@@ -207,73 +207,99 @@ export function SolarCalculator() {
                   title="When are you planning to get solar?"
                   helper="Tell us your expected timeline."
                 />
-                <div className="flex flex-col divide-y divide-gray-200/80 rounded-2xl border border-border/40 overflow-hidden">                  {entries(SOLAR_CONFIG.timelines).map(([key, opt]) => (
-                    <OptionCard
-                      key={key}
-                      label={opt.label}
-                      selected={answers.timeline === key}
-                      onClick={() => pick("timeline", key as TimelineKey)}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : null}
+                {step === 1 ? (
+  <>
+    <QuestionHead
+      title="When are you planning to get solar?"
+      helper="Tell us your expected timeline."
+    />
+    <div className="space-y-2">
+      {entries(SOLAR_CONFIG.timelines).map(([key, opt], idx, arr) => (
+        <div key={key}>
+          <OptionCard
+            label={opt.label}
+            selected={answers.timeline === key}
+            onClick={() => pick("timeline", key as TimelineKey)}
+          />
+          {idx < arr.length - 1 && (
+            <hr className="my-2 border-t border-gray-200/80" />
+          )}
+        </div>
+      ))}
+    </div>
+  </>
+) : null}
 
-            {step === 2 ? (
-              <>
-                <QuestionHead
-                  title="What type of roof do you have?"
-                  helper="So we can plan the right structure for your home."
-                />
-                <div className="flex flex-col divide-y divide-gray-200/80 rounded-2xl border border-border/40 overflow-hidden">                  {entries(SOLAR_CONFIG.roofTypes).map(([key, opt]) => (
-                    <OptionCard
-                      key={key}
-                      label={opt.label}
-                      helper={opt.helper}
-                      selected={answers.roofType === key}
-                      onClick={() => pick("roofType", key as RoofTypeKey)}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : null}
+{step === 2 ? (
+  <>
+    <QuestionHead
+      title="What type of roof do you have?"
+      helper="So we can plan the right structure for your home."
+    />
+    <div className="space-y-2">
+      {entries(SOLAR_CONFIG.roofTypes).map(([key, opt], idx, arr) => (
+        <div key={key}>
+          <OptionCard
+            label={opt.label}
+            helper={opt.helper}
+            selected={answers.roofType === key}
+            onClick={() => pick("roofType", key as RoofTypeKey)}
+          />
+          {idx < arr.length - 1 && (
+            <hr className="my-2 border-t border-gray-200/80" />
+          )}
+        </div>
+      ))}
+    </div>
+  </>
+) : null}
 
-            {step === 3 ? (
-              <>
-                <QuestionHead
-                  title="How big is your terrace?"
-                  helper="This helps estimate how much you can save."
-                />
-                <div className="flex flex-col divide-y divide-gray-200/80 rounded-2xl border border-border/40 overflow-hidden">                  {entries(SOLAR_CONFIG.terraceSizes).map(([key, opt]) => (
-                    <OptionCard
-                      key={key}
-                      label={opt.label}
-                      helper={opt.helper}
-                      selected={answers.terraceSize === key}
-                      onClick={() => pick("terraceSize", key as TerraceSizeKey)}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : null}
+{step === 3 ? (
+  <>
+    <QuestionHead
+      title="How big is your terrace?"
+      helper="This helps estimate how much you can save."
+    />
+    <div className="space-y-2">
+      {entries(SOLAR_CONFIG.terraceSizes).map(([key, opt], idx, arr) => (
+        <div key={key}>
+          <OptionCard
+            label={opt.label}
+            helper={opt.helper}
+            selected={answers.terraceSize === key}
+            onClick={() => pick("terraceSize", key as TerraceSizeKey)}
+          />
+          {idx < arr.length - 1 && (
+            <hr className="my-2 border-t border-gray-200/80" />
+          )}
+        </div>
+      ))}
+    </div>
+  </>
+) : null}
 
-            {step === 4 ? (
-              <>
-                <QuestionHead
-                  title="What's your average monthly electricity bill?"
-                  helper="This drives your savings estimate."
-                />
-                <div className="flex flex-col divide-y divide-gray-200/80 rounded-2xl border border-border/40 overflow-hidden">                  {entries(SOLAR_CONFIG.billRanges).map(([key, opt]) => (
-                    <OptionCard
-                      key={key}
-                      label={opt.label}
-                      selected={answers.billRange === key}
-                      onClick={() => pick("billRange", key as BillRangeKey)}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : null}
+{step === 4 ? (
+  <>
+    <QuestionHead
+      title="What's your average monthly electricity bill?"
+      helper="This drives your savings estimate."
+    />
+    <div className="space-y-2">
+      {entries(SOLAR_CONFIG.billRanges).map(([key, opt], idx, arr) => (
+        <div key={key}>
+          <OptionCard
+            label={opt.label}
+            selected={answers.billRange === key}
+            onClick={() => pick("billRange", key as BillRangeKey)}
+          />
+          {idx < arr.length - 1 && (
+            <hr className="my-2 border-t border-gray-200/80" />
+          )}
+        </div>
+      ))}
+    </div>
+  </>
+) : null}
 
             {step === 5 ? (
               <>
