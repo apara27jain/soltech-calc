@@ -99,7 +99,8 @@ export function ResultView({
          <a href={quoteLink} target="_blank" rel="noopener noreferrer" className="block w-full">
            <PrimaryButton variant="whatsapp">Talk on Whatsapp</PrimaryButton>
          </a>
-         <a href="https://soltech-energy-get-quote-form.vercel.app/" target="_blank" rel="noopener noreferrer" className="block w-full">
+         <a href="https://soltech-energy-get-quote-form.vercel.app/" 
+            target="_blank" rel="noopener noreferrer" className="block w-full">
            <PrimaryButton variant="quote">Get Free Quote</PrimaryButton>
          </a>
           
