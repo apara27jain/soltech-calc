@@ -17,7 +17,7 @@ export function ResultView({
   waMessage,
   onRestart,
 }: Props) {
-  const businessWa = SOLAR_CONFIG.business.whatsappNumber;
+  whatsappNumber: "8239573979",
   const quoteLink = `https://wa.me/${businessWa}?text=${encodeURIComponent(
     `Hi Soltech Energy, I'm ${name}. I checked my Solar Potential (${result.recommendedKw} kW recommended) and want to talk to an expert.`
   )}`;
