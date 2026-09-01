@@ -1,4 +1,3 @@
-```tsx
 import { formatINR, type CalcResult } from "@/lib/solar-calc";
 import { SOLAR_CONFIG } from "@/lib/solar-config";
 import { PrimaryButton } from "./ui";
@@ -183,4 +182,3 @@ function SavingsCard({
     </div>
   );
 }
-```
