@@ -7,7 +7,7 @@
 
 export const SOLAR_CONFIG = {
   /** Average grid tariff (INR per kWh) used to convert units into savings. */
-  tariffPerKwh: 8,
+  tariffPerKwh: 7.95,
 
   /**
    * Conservative daily generation per installed kW (kWh/kW/day) for Rajasthan.
@@ -93,7 +93,7 @@ export const SOLAR_CONFIG = {
     name: "Soltech Energy",
     city: "Jaipur",
     /** E.164 without the leading + (used for wa.me links). */
-    whatsappNumber: "919999999999",
+    whatsappNumber: "918239573979",
     tagline: "Powering homes. Saving more.",
   },
 } as const;
